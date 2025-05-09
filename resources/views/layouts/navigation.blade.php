@@ -1,19 +1,31 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-gradient-to-r from-green-500 via-blue-300 to-blue-400">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                    </a>
-                </div>
+                
+            <div class="shrink-0 flex items-center">
+                <a href="{{ route('dashboard') }}">
+                    <img src="{{ ['https://img.freepik.com/vecteurs-libre/degrade-illustration-oiseau-colore_343694-1741.jpg?semt=ais_hybrid&w=740', 
+                                  'https://img.freepik.com/vecteurs-libre/degrade-illustration-oiseau-colore_343694-1741.jpg?semt=ais_hybrid&w=740', 
+                                  'https://img.freepik.com/vecteurs-libre/degrade-illustration-oiseau-colore_343694-1741.jpg?semt=ais_hybrid&w=740'][array_rand([0,1,2])] }}" 
+                        class="block h-9 w-auto" alt="Logo" />
+                </a>
+            </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('parcours.index')" :active="request()->routeIs('parcours.*')">
+                        {{ __('Parcours') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('parcours.create')" :active="request()->routeIs('parcours.create')">
+                        {{ __('Créer un parcours') }}
                     </x-nav-link>
                 </div>
             </div>
