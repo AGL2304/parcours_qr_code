@@ -7,9 +7,9 @@
                 
             <div class="shrink-0 flex items-center">
                 <a href="{{ route('dashboard') }}">
-                    <img src="{{ ['https://img.freepik.com/vecteurs-libre/degrade-illustration-oiseau-colore_343694-1741.jpg?semt=ais_hybrid&w=740', 
-                                  'https://img.freepik.com/vecteurs-libre/degrade-illustration-oiseau-colore_343694-1741.jpg?semt=ais_hybrid&w=740', 
-                                  'https://img.freepik.com/vecteurs-libre/degrade-illustration-oiseau-colore_343694-1741.jpg?semt=ais_hybrid&w=740'][array_rand([0,1,2])] }}" 
+                    <img src="{{ ['https://img.freepik.com/vecteurs-premium/modele-logo-nature-abstraite-fleur-coloree_23987-39.jpg?ga=GA1.1.807285248.1746785881&semt=ais_hybrid&w=740', 
+                                  'https://img.freepik.com/vecteurs-premium/modele-logo-nature-abstraite-fleur-coloree_23987-39.jpg?ga=GA1.1.807285248.1746785881&semt=ais_hybrid&w=740', 
+                                  'https://img.freepik.com/vecteurs-premium/modele-logo-nature-abstraite-fleur-coloree_23987-39.jpg?ga=GA1.1.807285248.1746785881&semt=ais_hybrid&w=740'][array_rand([0,1,2])] }}" 
                         class="block h-9 w-auto" alt="Logo" />
                 </a>
             </div>
@@ -26,6 +26,9 @@
                     </x-nav-link>
                     <x-nav-link :href="route('parcours.create')" :active="request()->routeIs('parcours.create')">
                         {{ __('Créer un parcours') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('qr')" :active="request()->routeIs('qr')">
+                        {{ __('Générer un QRcode') }}
                     </x-nav-link>
                 </div>
             </div>

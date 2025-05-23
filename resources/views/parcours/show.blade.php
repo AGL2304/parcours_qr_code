@@ -1,4 +1,4 @@
-<!-- show-parcours.blade.php -->
+
 <x-app-layout>
     <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
         <h1 class="text-3xl font-bold mb-4">{{ $parcours->nom }}</h1>
