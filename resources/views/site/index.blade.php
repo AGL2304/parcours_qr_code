@@ -4,7 +4,7 @@
     <div class="max-w-5xl mx-auto p-6 mt-10 bg-white shadow-md rounded-lg">
         <h1 class="text-3xl font-bold mb-6">Liste des Sites</h1>
 
-```
+
     @if (session('success'))
         <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
             {{ session('success') }}
@@ -37,6 +37,6 @@
         </div>
     @endif
 </div>
-```
+
 
 </x-app-layout>

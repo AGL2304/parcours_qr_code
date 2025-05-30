@@ -37,7 +37,7 @@ class ParcoursController extends Controller
         $request->validate([
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'sites' => 'required|array',
+            'sites' => 'required|array|min:3',
             'sites.*.id' => 'required|exists:sites,id',
             'sites.*.ordre' => 'required|integer|min:1',
         ]);
@@ -48,12 +48,17 @@ class ParcoursController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        foreach ($request->sites as $site) {
-            $parcours->sites()->attach($site['id'], ['ordre' => $site['ordre']]);
+        foreach ($request->sites as $siteData) {
+            if (!empty($siteData['id']) && !empty($siteData['ordre'])) {
+                $parcours->sites()->attach($siteData['id'], ['ordre' => $siteData['ordre']]);
+            }
         }
 
         return redirect()->route('parcours.show', $parcours)->with('success', 'Parcours créé avec succès.');
     }
+
+
+
 
 
     /**
@@ -69,7 +74,7 @@ class ParcoursController extends Controller
     {
         $parcours->load(['user', 'sites' => fn($q) => $q->orderBy('etape_parcours.ordre')]);
         return view('parcours.show', compact('parcours'));
-        
+
     }
 
 

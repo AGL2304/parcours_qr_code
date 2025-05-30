@@ -27,6 +27,12 @@
                     <x-nav-link :href="route('parcours.create')" :active="request()->routeIs('parcours.create')">
                         {{ __('Créer un parcours') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('sites.index')" :active="request()->routeIs('sites.*')">
+                        {{ __('Sites') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('sites.create')" :active="request()->routeIs('sites.create')">
+                        {{ __('Créer un site') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('qr')" :active="request()->routeIs('qr')">
                         {{ __('Générer un QRcode') }}
                     </x-nav-link>

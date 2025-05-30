@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Parcours;
 use App\Models\Site;
 use Illuminate\Support\Facades\DB;
 
@@ -14,9 +13,8 @@ class SiteController extends Controller
      */
     public function index()
     {
-        $sites = Site::all(); // Récupération de tous les sites
+        $sites = Site::all();
         return view('site.index', compact('sites'));
-
     }
 
     /**
@@ -24,8 +22,7 @@ class SiteController extends Controller
      */
     public function create()
     {
-        $sites = Site::all();
-        return view('site.create', compact('sites'));
+        return view('site.create');
     }
 
     /**
@@ -36,96 +33,76 @@ class SiteController extends Controller
         $request->validate([
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'sites' => 'required|array',
-            'sites.*.id' => 'required|exists:sites,id',
-            'sites.*.ordre' => 'required|integer|min:1',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
 
         try {
-            DB::beginTransaction();
-
-            $parcours = Parcours::create([
+            Site::create([
                 'nom' => $request->nom,
                 'description' => $request->description,
-                'user_id' => auth()->id(),
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
             ]);
 
-            $sites = collect($request->sites)
-                ->mapWithKeys(fn($site) => [$site['id'] => ['ordre' => $site['ordre']]]);
-
-            $parcours->sites()->attach($sites);
-
-            DB::commit();
-            return redirect()->route('parcours.show', $parcours)->with('success', 'Parcours créé avec succès.');
+            return redirect()->route('site.index')->with('success', 'Site créé avec succès.');
         } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->withErrors('Une erreur est survenue lors de la création du parcours.');
+            return redirect()->back()->withErrors('Une erreur est survenue lors de la création du site.');
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Parcours $parcours)
+    public function show(Site $site)
     {
-        $parcours->load(['user', 'sites' => fn($q) => $q->orderBy('etape_parcours.ordre')]);
-        return view('parcours.show', compact('parcours'));
+        return view('site.show', compact('site'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Parcours $parcours)
+    public function edit(Site $site)
     {
-        $sites = Site::all();
-        $parcours->load('sites');
-        return view('site.edit', compact('parcours', 'sites'));
+        return view('site.edit', compact('site'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Parcours $parcours)
+    public function update(Request $request, Site $site)
     {
         $request->validate([
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'sites' => 'required|array',
-            'sites.*.id' => 'required|exists:sites,id',
-            'sites.*.ordre' => 'required|integer|min:1',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
 
         try {
-            DB::beginTransaction();
-
-            $parcours->update([
+            $site->update([
                 'nom' => $request->nom,
                 'description' => $request->description,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
             ]);
 
-            $sites = collect($request->sites)
-                ->mapWithKeys(fn($site) => [$site['id'] => ['ordre' => $site['ordre']]]);
-
-            $parcours->sites()->sync($sites);
-
-            DB::commit();
-            return redirect()->route('parcours.show', $parcours)->with('success', 'Parcours mis à jour avec succès.');
+            return redirect()->route('site.show', $site)->with('success', 'Site mis à jour avec succès.');
         } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->withErrors('Une erreur est survenue lors de la mise à jour du parcours.');
+            return redirect()->back()->withErrors('Une erreur est survenue lors de la mise à jour du site.');
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Parcours $parcours)
+    public function destroy(Site $site)
     {
         try {
-            $parcours->delete();
-            return redirect()->route('site.index')->with('success', 'Parcours supprimé avec succès.');
+            $site->delete();
+            return redirect()->route('site.index')->with('success', 'Site supprimé avec succès.');
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors('Une erreur est survenue lors de la suppression du parcours.');
+            return redirect()->back()->withErrors('Une erreur est survenue lors de la suppression du site.');
         }
     }
 }

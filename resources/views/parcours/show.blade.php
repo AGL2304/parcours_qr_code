@@ -1,9 +1,9 @@
-
 <x-app-layout>
     <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
         <h1 class="text-3xl font-bold mb-4">{{ $parcours->nom }}</h1>
 
-        <p class="text-gray-600 mb-4">Créé par : <span class="font-semibold">{{ $parcours->user->name ?? 'Inconnu' }}</span>
+        <p class="text-gray-600 mb-4">
+            Créé par : <span class="font-semibold">{{ $parcours->user->name ?? 'Inconnu' }}</span>
         </p>
 
         <div class="mb-6">
@@ -18,7 +18,7 @@
                 <p class="text-gray-500">Aucun site n'est encore associé à ce parcours.</p>
             @else
                 <ol class="list-decimal pl-6 space-y-2">
-                    @foreach ($parcours->sites as $site)
+                    @foreach ($parcours->sites->sortBy('pivot.ordre') as $site)
                         <li>
                             <span class="font-medium">{{ $site->nom }}</span>
                             <span class="text-gray-500">(Ordre : {{ $site->pivot->ordre }})</span>
@@ -41,18 +41,26 @@
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                var map = L.map('map').setView([{{ $parcours->sites->first()->latitude ?? 48.8566 }}, {{ $parcours->sites->first()->longitude ?? 2.3522 }}], 6);
+                @php
+                    $firstSite = $parcours->sites->sortBy('pivot.ordre')->first();
+                    $lat = $firstSite->latitude ?? 48.8566;
+                    $lng = $firstSite->longitude ?? 2.3522;
+                @endphp
+
+                var map = L.map('map').setView([{{ $lat }}, {{ $lng }}], 12);
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; OpenStreetMap contributors'
                 }).addTo(map);
 
-                @foreach ($parcours->sites as $site)
-                    L.marker([{{ $site->latitude }}, {{ $site->longitude }}])
-                        .addTo(map)
-                        .bindPopup("<strong>{{ $site->nom }}</strong><br>Ordre : {{ $site->pivot->ordre }}");
+                @foreach ($parcours->sites->sortBy('pivot.ordre') as $site)
+                    @if ($site->latitude && $site->longitude)
+                        L.marker([{{ $site->latitude }}, {{ $site->longitude }}])
+                            .addTo(map)
+                            .bindPopup("<strong>{{ $site->nom }}</strong><br>Ordre : {{ $site->pivot->ordre }}");
+                    @endif
                 @endforeach
-                });
+            });
         </script>
     @endpush
 </x-app-layout>

@@ -15,7 +15,7 @@ class Parcours extends Model
     {
         return $this->belongsToMany(Site::class, 'etape_parcours')
                     ->withPivot('ordre')
-                    ->orderBy('pivot_ordre');
+                    ->orderBy('ordre');
     }
 
     public function user()
