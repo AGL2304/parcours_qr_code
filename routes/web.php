@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\ParcoursController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\PublicController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,3 +36,11 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::resource('sites', SiteController::class);
 });
+
+
+
+Route::get('/parcours-public', [PublicController::class, 'showParcours'])->name('public.parcours');
+
+
+Route::get('/liste_parcours', [PublicController::class, 'listeParcours'])->name('public.parcours.liste');
+

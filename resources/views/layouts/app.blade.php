@@ -11,15 +11,24 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+    <!-- Styles -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Livewire Styles -->
+    @livewireStyles
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gradient-to-r from-blue-500 via-blue-300 to-orange-400">
+
         @include('layouts.navigation')
 
         <!-- Page Heading -->
@@ -32,16 +41,13 @@
         @endisset
 
         <!-- Page Content -->
-
         <main>
-            <!-- @yield('content') -->
             {{ $slot }}
-            
         </main>
 
+        <!-- Footer -->
         @include('layouts.footer')
 
-        <!-- Page Footing -->
         @isset($footer)
             <footer class="bg-white shadow">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -52,6 +58,10 @@
 
     </div>
 
+    <!-- Livewire Scripts -->
+    @livewireScripts
+
+    <!-- Stack Scripts -->
     @stack('scripts')
 
 </body>

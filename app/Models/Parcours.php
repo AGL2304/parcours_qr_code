@@ -15,6 +15,7 @@ class Parcours extends Model
     {
         return $this->belongsToMany(Site::class, 'etape_parcours')
                     ->withPivot('ordre')
+                    ->withTimestamps()
                     ->orderBy('ordre');
     }
 

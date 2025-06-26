@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Site;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class SiteController extends Controller
 {
@@ -14,7 +15,7 @@ class SiteController extends Controller
     public function index()
     {
         $sites = Site::all();
-        return view('site.index', compact('sites'));
+        return view('sites.index', compact('sites'));
     }
 
     /**
@@ -22,7 +23,7 @@ class SiteController extends Controller
      */
     public function create()
     {
-        return view('site.create');
+        return view('sites.create');
     }
 
     /**
@@ -35,17 +36,26 @@ class SiteController extends Controller
             'description' => 'nullable|string',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         try {
+            $imagePath = null;
+            
+            // Gestion de l'upload d'image
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('sites', 'public');
+            }
+
             Site::create([
                 'nom' => $request->nom,
                 'description' => $request->description,
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
+                'image' => $imagePath,
             ]);
 
-            return redirect()->route('site.index')->with('success', 'Site créé avec succès.');
+            return redirect()->route('sites.index')->with('success', 'Site créé avec succès.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors('Une erreur est survenue lors de la création du site.');
         }
@@ -56,7 +66,7 @@ class SiteController extends Controller
      */
     public function show(Site $site)
     {
-        return view('site.show', compact('site'));
+        return view('sites.show', compact('site'));
     }
 
     /**
@@ -64,7 +74,7 @@ class SiteController extends Controller
      */
     public function edit(Site $site)
     {
-        return view('site.edit', compact('site'));
+        return view('sites.edit', compact('site'));
     }
 
     /**
@@ -77,17 +87,32 @@ class SiteController extends Controller
             'description' => 'nullable|string',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         try {
+            $imagePath = $site->image; // Conserver l'ancienne image par défaut
+            
+            // Gestion de l'upload d'une nouvelle image
+            if ($request->hasFile('image')) {
+                // Supprimer l'ancienne image si elle existe
+                if ($site->image && Storage::disk('public')->exists($site->image)) {
+                    Storage::disk('public')->delete($site->image);
+                }
+                
+                // Stocker la nouvelle image
+                $imagePath = $request->file('image')->store('sites', 'public');
+            }
+
             $site->update([
                 'nom' => $request->nom,
                 'description' => $request->description,
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
+                'image' => $imagePath,
             ]);
 
-            return redirect()->route('site.show', $site)->with('success', 'Site mis à jour avec succès.');
+            return redirect()->route('sites.show', $site)->with('success', 'Site mis à jour avec succès.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors('Une erreur est survenue lors de la mise à jour du site.');
         }
@@ -99,6 +124,11 @@ class SiteController extends Controller
     public function destroy(Site $site)
     {
         try {
+            // Supprimer l'image associée si elle existe
+            if ($site->image && Storage::disk('public')->exists($site->image)) {
+                Storage::disk('public')->delete($site->image);
+            }
+            
             $site->delete();
             return redirect()->route('site.index')->with('success', 'Site supprimé avec succès.');
         } catch (\Exception $e) {

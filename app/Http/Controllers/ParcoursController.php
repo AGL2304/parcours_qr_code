@@ -48,14 +48,28 @@ class ParcoursController extends Controller
             'user_id' => auth()->id(),
         ]);
 
+        // Construction du tableau pour sync()
+        $sitePivotData = [];
+
         foreach ($request->sites as $siteData) {
-            if (!empty($siteData['id']) && !empty($siteData['ordre'])) {
-                $parcours->sites()->attach($siteData['id'], ['ordre' => $siteData['ordre']]);
+            $siteId = $siteData['id'];
+            $ordre = $siteData['ordre'];
+
+            if (!empty($siteId) && !empty($ordre)) {
+                $sitePivotData[$siteId] = [
+                    'ordre' => $ordre,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
             }
         }
 
+        // Liaison avec les sites
+        $parcours->sites()->sync($sitePivotData);
+
         return redirect()->route('parcours.show', $parcours)->with('success', 'Parcours créé avec succès.');
     }
+
 
 
 
@@ -70,12 +84,18 @@ class ParcoursController extends Controller
 
 
     // }
-    public function show(Parcours $parcours)
+    public function show(Parcours $parcour)
     {
-        $parcours->load(['user', 'sites' => fn($q) => $q->orderBy('etape_parcours.ordre')]);
-        return view('parcours.show', compact('parcours'));
+        $parcour->load([
+            'user',
+            'sites' => fn($q) => $q->orderBy('etape_parcours.ordre')
+        ]);
 
+        return view('parcours.show', ['parcours' => $parcour]);
     }
+
+
+
 
 
 

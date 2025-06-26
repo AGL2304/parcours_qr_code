@@ -3,12 +3,17 @@
         <h1 class="text-3xl font-bold mb-4">{{ $parcours->nom }}</h1>
 
         <p class="text-gray-600 mb-4">
-            Créé par : <span class="font-semibold">{{ $parcours->user->name ?? 'Inconnu' }}</span>
+            Créé par :
+            <span class="font-semibold">
+                {{ $parcours->user?->name ?? 'Inconnu' }}
+            </span>
         </p>
 
         <div class="mb-6">
             <h2 class="text-xl font-semibold mb-2">Description</h2>
-            <p class="text-gray-700">{{ $parcours->description }}</p>
+            <p class="text-gray-700">
+                {{ $parcours->description }}
+            </p>
         </div>
 
         <div>
@@ -20,8 +25,9 @@
                 <ol class="list-decimal pl-6 space-y-2">
                     @foreach ($parcours->sites->sortBy('pivot.ordre') as $site)
                         <li>
-                            <span class="font-medium">{{ $site->nom }}</span>
-                            <span class="text-gray-500">(Ordre : {{ $site->pivot->ordre }})</span>
+                            <span class="font-medium">{{ $site->nom }}</span><br>
+                            <span class="text-sm text-gray-500">Ordre : {{ $site->pivot->ordre }}</span><br>
+                            <span class="text-sm text-gray-600">{{ $site->description }}</span>
                         </li>
                     @endforeach
                 </ol>
@@ -42,22 +48,23 @@
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 @php
-                    $firstSite = $parcours->sites->sortBy('pivot.ordre')->first();
-                    $lat = $firstSite->latitude ?? 48.8566;
-                    $lng = $firstSite->longitude ?? 2.3522;
+                    $orderedSites = $parcours->sites->sortBy('pivot.ordre');
+                    $first = $orderedSites->first();
+                    $lat = $first?->latitude ?? 48.8566;
+                    $lng = $first?->longitude ?? 2.3522;
                 @endphp
 
-                var map = L.map('map').setView([{{ $lat }}, {{ $lng }}], 12);
+                var map = L.map('map').setView([{{ $lat }}, {{ $lng }}], 13);
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; OpenStreetMap contributors'
                 }).addTo(map);
 
-                @foreach ($parcours->sites->sortBy('pivot.ordre') as $site)
+                @foreach ($orderedSites as $site)
                     @if ($site->latitude && $site->longitude)
                         L.marker([{{ $site->latitude }}, {{ $site->longitude }}])
                             .addTo(map)
-                            .bindPopup("<strong>{{ $site->nom }}</strong><br>Ordre : {{ $site->pivot->ordre }}");
+                            .bindPopup(`<strong>{{ $site->nom }}</strong><br>Ordre : {{ $site->pivot->ordre }}`);
                     @endif
                 @endforeach
             });
