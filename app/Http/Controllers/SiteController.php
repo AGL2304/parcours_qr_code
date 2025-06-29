@@ -14,7 +14,8 @@ class SiteController extends Controller
      */
     public function index()
     {
-        $sites = Site::all();
+        // Afficher seulement les sites de l'utilisateur connecté
+        $sites = Site::where('user_id', auth()->id())->get();
         return view('sites.index', compact('sites'));
     }
 
@@ -41,7 +42,7 @@ class SiteController extends Controller
 
         try {
             $imagePath = null;
-            
+
             // Gestion de l'upload d'image
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('sites', 'public');
@@ -53,11 +54,12 @@ class SiteController extends Controller
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
                 'image' => $imagePath,
+                'user_id' => auth()->id(), // Associer le site à l'utilisateur connecté
             ]);
 
             return redirect()->route('sites.index')->with('success', 'Site créé avec succès.');
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors('Une erreur est survenue lors de la création du site.');
+            return redirect()->back()->withErrors($e->getMessage());
         }
     }
 
@@ -66,6 +68,11 @@ class SiteController extends Controller
      */
     public function show(Site $site)
     {
+        // Vérifier que l'utilisateur est propriétaire du site
+        if ($site->user_id !== auth()->id()) {
+            abort(403, 'Accès non autorisé.');
+        }
+
         return view('sites.show', compact('site'));
     }
 
@@ -74,6 +81,11 @@ class SiteController extends Controller
      */
     public function edit(Site $site)
     {
+        // Vérifier que l'utilisateur est propriétaire du site
+        if ($site->user_id !== auth()->id()) {
+            abort(403, 'Accès non autorisé.');
+        }
+
         return view('sites.edit', compact('site'));
     }
 
@@ -82,6 +94,11 @@ class SiteController extends Controller
      */
     public function update(Request $request, Site $site)
     {
+        // Vérifier que l'utilisateur est propriétaire du site
+        if ($site->user_id !== auth()->id()) {
+            abort(403, 'Accès non autorisé.');
+        }
+
         $request->validate([
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -92,14 +109,14 @@ class SiteController extends Controller
 
         try {
             $imagePath = $site->image; // Conserver l'ancienne image par défaut
-            
+
             // Gestion de l'upload d'une nouvelle image
             if ($request->hasFile('image')) {
                 // Supprimer l'ancienne image si elle existe
                 if ($site->image && Storage::disk('public')->exists($site->image)) {
                     Storage::disk('public')->delete($site->image);
                 }
-                
+
                 // Stocker la nouvelle image
                 $imagePath = $request->file('image')->store('sites', 'public');
             }
@@ -123,16 +140,27 @@ class SiteController extends Controller
      */
     public function destroy(Site $site)
     {
+        // Vérifier que l'utilisateur est propriétaire du site
+        if ($site->user_id !== auth()->id()) {
+            abort(403, 'Accès non autorisé.');
+        }
+
         try {
             // Supprimer l'image associée si elle existe
             if ($site->image && Storage::disk('public')->exists($site->image)) {
                 Storage::disk('public')->delete($site->image);
             }
-            
+
             $site->delete();
-            return redirect()->route('site.index')->with('success', 'Site supprimé avec succès.');
+            return redirect()->route('sites.index')->with('success', 'Site supprimé avec succès.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors('Une erreur est survenue lors de la suppression du site.');
         }
+    }
+
+
+    public function __construct()
+    {
+        $this->middleware('auth');
     }
 }

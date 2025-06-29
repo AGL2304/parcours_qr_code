@@ -22,4 +22,20 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    /**
+     * Relation avec les parcours créés par l'utilisateur
+     */
+    public function parcours()
+    {
+        return $this->hasMany(Parcours::class);
+    }
+
+    /**
+     * Relation avec les sites créés par l'utilisateur
+     */
+    public function sites()
+    {
+        return $this->hasMany(Site::class);
+    }
 }
