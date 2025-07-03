@@ -27,7 +27,7 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gradient-to-r from-blue-500 via-blue-300 to-orange-400">
+    <div class="min-h-screen bg-gradient-to-r from-green-500 via-blue-300 to-blue-400 ">
 
         @include('layouts.navigation')
 
@@ -41,7 +41,7 @@
         @endisset
 
         <!-- Page Content -->
-        <main>
+        <main class="mb-16">
             {{ $slot }}
         </main>
 
