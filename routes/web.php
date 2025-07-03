@@ -44,3 +44,16 @@ Route::get('/parcours-public', [PublicController::class, 'showParcours'])->name(
 
 Route::get('/liste_parcours', [PublicController::class, 'listeParcours'])->name('public.parcours.liste');
 
+// Routes authentifiées
+Route::middleware('auth')->group(function () {
+    // Routes CRUD pour les parcours
+    Route::resource('parcours', ParcoursController::class);
+    
+    // Route pour télécharger le QR code
+    Route::get('parcours/{parcours}/qrcode/download', [ParcoursController::class, 'downloadQrCode'])
+        ->name('parcours.qrcode.download');
+});
+
+// Route publique pour l'affichage via QR code (sans authentification)
+Route::get('parcours/{parcours}/public', [ParcoursController::class, 'showPublic'])
+    ->name('parcours.public');

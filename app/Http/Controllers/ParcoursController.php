@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Parcours;
 use App\Models\Site;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class ParcoursController extends Controller
 {
@@ -101,6 +102,25 @@ class ParcoursController extends Controller
     }
 
     /**
+     * Display the specified parcours for public access (without authentication).
+     */
+    public function showPublic(Parcours $parcours)
+    {
+        // Charger les sites associés au parcours, triés par ordre
+        $parcours->load([
+            'user',
+            'sites' => fn($q) => $q->orderBy('etape_parcours.ordre')
+        ]);
+
+        // Optionnel : Vérifiez si le parcours est public si vous avez un champ is_public
+        // if (!$parcours->is_public) {
+        //     abort(404, 'Ce parcours n\'est pas accessible publiquement.');
+        // }
+
+        return view('parcours.public', compact('parcours'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Parcours $parcours)
@@ -189,8 +209,56 @@ class ParcoursController extends Controller
         }
     }
 
+    /**
+     * Generate and download QR code for the specified parcours.
+     */
+    public function downloadQrCode(Parcours $parcours)
+    {
+        // Vérifier que l'utilisateur est propriétaire du parcours
+        if ($parcours->user_id !== auth()->id()) {
+            abort(403, 'Accès non autorisé.');
+        }
+
+        // Générer l'URL publique du parcours pour le QR code
+        $publicUrl = route('parcours.public', $parcours);
+
+        $qrCode = QrCode::format('png')
+            ->size(300)
+            ->margin(2)
+            ->errorCorrection('M')
+            ->generate($publicUrl);
+
+        $filename = 'qr-code-parcours-' . $parcours->id . '.png';
+
+        return response($qrCode)
+            ->header('Content-Type', 'image/png')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+    }
+
+    /**
+     * Show QR code for the specified parcours.
+     */
+    public function showQrCode(Parcours $parcours)
+    {
+        // Vérifier que l'utilisateur est propriétaire du parcours
+        if ($parcours->user_id !== auth()->id()) {
+            abort(403, 'Accès non autorisé.');
+        }
+
+        // Générer l'URL publique du parcours pour le QR code
+        $publicUrl = route('parcours.public', $parcours);
+
+        $qrCode = QrCode::format('svg')
+            ->size(200)
+            ->margin(2)
+            ->errorCorrection('M')
+            ->generate($publicUrl);
+
+        return view('parcours.qrcode', compact('parcours', 'qrCode'));
+    }
+
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['showPublic']);
     }
 }
