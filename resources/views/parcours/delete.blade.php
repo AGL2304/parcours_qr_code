@@ -1,4 +1,4 @@
-<!-- resources/views/parcours/delete.blade.php -->
+
 <x-app-layout>
     <div class="max-w-md mx-auto p-6 mt-10 bg-white shadow-md rounded-lg text-center">
         <h1 class="text-2xl font-bold mb-4">Supprimer le parcours : {{ $parcours->nom }} ?</h1>

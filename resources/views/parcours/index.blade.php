@@ -1,4 +1,4 @@
-<!-- index-parcours.blade.php -->
+
 <x-app-layout>
     <div class="max-w-5xl mx-auto p-6 mt-10 bg-white shadow-md rounded-lg">
         <h1 class="text-3xl font-bold mb-6">Liste des parcours</h1>

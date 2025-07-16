@@ -51,11 +51,9 @@
                 </div>
                 <div class="hero-image md:w-1/2">
                     <div class="map-container relative">
-                        <div class="map-placeholder bg-gray-200 h-64 rounded">
-                            <div class="map-point point-1"></div>
-                            <div class="map-point point-2"></div>
-                            <div class="map-point point-3"></div>
-                        </div>
+                        <!-- image de la carte -->
+                        <img src="/images/carte-parcours.jpg" alt="Carte interactive" class="rounded shadow h-64 w-full object-cover">
+
                         <div class="map-info mt-4 flex justify-between items-center">
                             <div>
                                 <h3 class="text-xl font-semibold">Carte Interactive</h3>
@@ -66,7 +64,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
+            </div>
+
             </div>
         </div>
 

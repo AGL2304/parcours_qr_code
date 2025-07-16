@@ -88,10 +88,7 @@ class ParcoursController extends Controller
      */
     public function show(Parcours $parcour)
     {
-        // Vérifier que l'utilisateur est propriétaire du parcours
-        if ($parcour->user_id !== auth()->id()) {
-            abort(403, 'Accès non autorisé.');
-        }
+        $this->authorize('view', $parcour);
 
         $parcour->load([
             'user',
@@ -104,47 +101,39 @@ class ParcoursController extends Controller
     /**
      * Display the specified parcours for public access (without authentication).
      */
-    public function showPublic(Parcours $parcours)
+    public function showPublic(Parcours $parcour)
     {
         // Charger les sites associés au parcours, triés par ordre
-        $parcours->load([
+        $parcour->load([
             'user',
             'sites' => fn($q) => $q->orderBy('etape_parcours.ordre')
         ]);
 
         // Optionnel : Vérifiez si le parcours est public si vous avez un champ is_public
-        // if (!$parcours->is_public) {
+        // if (!$parcour->is_public) {
         //     abort(404, 'Ce parcours n\'est pas accessible publiquement.');
         // }
 
-        return view('parcours.public', compact('parcours'));
+        return view('parcours.public', ['parcours' => $parcour]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Parcours $parcours)
+    public function edit(Parcours $parcour)
     {
-        // Vérifier que l'utilisateur est propriétaire du parcours
-        if ($parcours->user_id !== auth()->id()) {
-            abort(403, 'Accès non autorisé.');
-        }
-
-        // Charger seulement les sites de l'utilisateur
+        $this->authorize('update', $parcour);
+        
         $sites = Site::where('user_id', auth()->id())->get();
-
-        return view('parcours.edit', compact('parcours', 'sites'));
+        return view('parcours.edit', compact('parcour', 'sites'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Parcours $parcours)
+    public function update(Request $request, Parcours $parcour)
     {
-        // Vérifier que l'utilisateur est propriétaire du parcours
-        if ($parcours->user_id !== auth()->id()) {
-            abort(403, 'Accès non autorisé.');
-        }
+        $this->authorize('update', $parcour);
 
         $request->validate([
             'nom' => 'required|string|max:255',
@@ -164,7 +153,7 @@ class ParcoursController extends Controller
             return redirect()->back()->withErrors('Vous ne pouvez utiliser que vos propres sites.');
         }
 
-        $parcours->update([
+        $parcour->update([
             'nom' => $request->nom,
             'description' => $request->description,
         ]);
@@ -186,23 +175,20 @@ class ParcoursController extends Controller
         }
 
         // Liaison avec les sites
-        $parcours->sites()->sync($sitePivotData);
+        $parcour->sites()->sync($sitePivotData);
 
-        return redirect()->route('parcours.show', $parcours)->with('success', 'Parcours mis à jour avec succès.');
+        return redirect()->route('parcours.show', $parcour)->with('success', 'Parcours mis à jour avec succès.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Parcours $parcours)
+    public function destroy(Parcours $parcour)
     {
-        // Vérifier que l'utilisateur est propriétaire du parcours
-        if ($parcours->user_id !== auth()->id()) {
-            abort(403, 'Accès non autorisé.');
-        }
+        $this->authorize('delete', $parcour);
 
         try {
-            $parcours->delete();
+            $parcour->delete();
             return redirect()->route('parcours.index')->with('success', 'Parcours supprimé avec succès.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors('Une erreur est survenue lors de la suppression du parcours.');
@@ -212,15 +198,12 @@ class ParcoursController extends Controller
     /**
      * Generate and download QR code for the specified parcours.
      */
-    public function downloadQrCode(Parcours $parcours)
+    public function downloadQrCode(Parcours $parcour)
     {
-        // Vérifier que l'utilisateur est propriétaire du parcours
-        if ($parcours->user_id !== auth()->id()) {
-            abort(403, 'Accès non autorisé.');
-        }
+        $this->authorize('view', $parcour);
 
         // Générer l'URL publique du parcours pour le QR code
-        $publicUrl = route('parcours.public', $parcours);
+        $publicUrl = route('parcours.public', $parcour);
 
         $qrCode = QrCode::format('png')
             ->size(300)
@@ -228,7 +211,7 @@ class ParcoursController extends Controller
             ->errorCorrection('M')
             ->generate($publicUrl);
 
-        $filename = 'qr-code-parcours-' . $parcours->id . '.png';
+        $filename = 'qr-code-parcours-' . $parcour->id . '.png';
 
         return response($qrCode)
             ->header('Content-Type', 'image/png')
@@ -238,15 +221,12 @@ class ParcoursController extends Controller
     /**
      * Show QR code for the specified parcours.
      */
-    public function showQrCode(Parcours $parcours)
+    public function showQrCode(Parcours $parcour)
     {
-        // Vérifier que l'utilisateur est propriétaire du parcours
-        if ($parcours->user_id !== auth()->id()) {
-            abort(403, 'Accès non autorisé.');
-        }
+        $this->authorize('view', $parcour);
 
         // Générer l'URL publique du parcours pour le QR code
-        $publicUrl = route('parcours.public', $parcours);
+        $publicUrl = route('parcours.public', $parcour);
 
         $qrCode = QrCode::format('svg')
             ->size(200)
@@ -254,11 +234,6 @@ class ParcoursController extends Controller
             ->errorCorrection('M')
             ->generate($publicUrl);
 
-        return view('parcours.qrcode', compact('parcours', 'qrCode'));
-    }
-
-    public function __construct()
-    {
-        $this->middleware('auth')->except(['showPublic']);
+        return view('parcours.qrcode', ['parcours' => $parcour, 'qrCode' => $qrCode]);
     }
 }
