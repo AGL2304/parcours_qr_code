@@ -14,7 +14,7 @@
     {{-- Navigation --}}
     <nav class="bg-white shadow-md p-4 mb-6">
         <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-600">GeoQRNav</div>
+            <div class="text-2xl font-bold text-blue-600">📍GeoQRNav</div>
             <div class="space-x-4">
                 <a href="{{ route('public.parcours') }}" class="text-gray-700 hover:text-blue-500">Accueil</a>
                 <a href="#" class="text-gray-700 hover:text-blue-500">Fonctionnalités</a>
@@ -44,15 +44,15 @@
                         enrichie pour vos parcours personnalisés.
                     </p>
                     <div class="auth-buttons space-x-2">
-                        <a href="{{ route('public.parcours.liste') }}" class="btn btn-gradient">Commencer
+                        <a href="{{ route('public.parcours.liste') }}" class="px-4 py-2 font-bold text-white bg-gradient-to-r from-blue-500 to-indigo-600 rounded shadow hover:from-blue-600 hover:to-indigo-700">Commencer
                             l'exploration</a>
-                        <a href="#" class="btn btn-outline">En savoir plus</a>
+                        <a href="#" class="px-4 py-2 font-bold text-indigo-600 border border-indigo-600 rounded hover:bg-indigo-50">En savoir plus</a>
                     </div>
                 </div>
                 <div class="hero-image md:w-1/2">
                     <div class="map-container relative">
                         <!-- image de la carte -->
-                        <img src="/images/carte-parcours.jpg" alt="Carte interactive" class="rounded shadow h-64 w-full object-cover">
+                        <img src="https://www.leparisien.fr/resizer/efCs6S_-rGdBhi2P0NQeijAEUws=/932x582/arc-anglerfish-eu-central-1-prod-leparisien.s3.amazonaws.com/public/5UAWECLJVFOXQS6RPEGA3XXU3M.jpg" alt="Carte interactive" class="rounded shadow h-64 w-full object-cover">
 
                         <div class="map-info mt-4 flex justify-between items-center">
                             <div>
@@ -175,7 +175,7 @@
             <!-- Ligne de séparation et copyright -->
             <div class="mt-8 pt-8 border-t border-gray-700">
                 <p class="text-center text-sm text-gray-400">
-                    © 2025 GeoQRNav. Tous droits réservés.
+                    © 2025 GeoQRNav. Tous droits réservés. 
                 </p>
             </div>
         </div>

@@ -28,15 +28,27 @@
                     class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300" required>{{ old('description', $parcours->description) }}</textarea>
             </div>
 
+            <!-- Champ sites manquant - vous devriez l'ajouter ici -->
             <div class="mb-4">
-                <label for="user_id" class="block font-semibold mb-1">Propriétaire</label>
-                <select id="user_id" name="user_id" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300" required>
-                    @foreach ($users as $user)
-                        <option value="{{ $user->id }}" {{ $user->id == old('user_id', $parcours->user_id) ? 'selected' : '' }}>
-                            {{ $user->name }}
-                        </option>
+                <label class="block font-semibold mb-1">Sites du parcours</label>
+                <div id="sites-container">
+                    @foreach ($parcours->sites->sortBy('pivot.ordre') as $site)
+                        <div class="flex items-center mb-2">
+                            <select name="sites[{{ $loop->index }}][id]" class="flex-1 border rounded px-3 py-2 mr-2" required>
+                                @foreach ($sites as $s)
+                                    <option value="{{ $s->id }}" {{ $s->id == $site->id ? 'selected' : '' }}>
+                                        {{ $s->nom }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <input type="number" name="sites[{{ $loop->index }}][ordre]" 
+                                   value="{{ $site->pivot->ordre }}" 
+                                   placeholder="Ordre" 
+                                   class="w-20 border rounded px-3 py-2" 
+                                   min="1" required>
+                        </div>
                     @endforeach
-                </select>
+                </div>
             </div>
 
             <div class="flex justify-end space-x-4">
