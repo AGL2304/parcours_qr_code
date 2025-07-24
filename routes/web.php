@@ -47,3 +47,9 @@ Route::middleware('auth')->group(function () {
     Route::get('parcours/{parcour}/qrcode/download', [ParcoursController::class, 'downloadQrCode'])
         ->name('parcours.qrcode.download');
 });
+
+
+// Pages statiques
+Route::view('/fonctionnalite', 'fonctionnalite')->name('fonctionnalite');
+Route::view('/a-propos', 'a-propos')->name('a-propos');
+Route::view('/contact', 'contact')->name('contact');

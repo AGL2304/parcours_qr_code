@@ -31,10 +31,11 @@
                     <h3 class="text-lg font-semibold text-white mb-4">Liens utiles</h3>
                     <!-- Utilisation de <ul> pour une liste sémantique -->
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Accueil</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Fonctionnalités</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">À propos</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="{{ route('public.parcours') }}" class="text-gray-400 hover:text-white transition-colors">Accueil</a></li>
+                        <li><a href="{{ route('fonctionnalite') }}" class="text-gray-400 hover:text-white transition-colors">Fonctionnalités</a>
+                        </li>
+                        <li><a href="{{ route('a-propos') }}" class="text-gray-400 hover:text-white transition-colors">À propos</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
                     </ul>
                 </div>
 

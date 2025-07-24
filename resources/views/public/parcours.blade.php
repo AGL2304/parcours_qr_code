@@ -17,9 +17,9 @@
             <div class="text-2xl font-bold text-blue-600">📍GeoQRNav</div>
             <div class="space-x-4">
                 <a href="{{ route('public.parcours') }}" class="text-gray-700 hover:text-blue-500">Accueil</a>
-                <a href="#" class="text-gray-700 hover:text-blue-500">Fonctionnalités</a>
-                <a href="#" class="text-gray-700 hover:text-blue-500">À propos</a>
-                <a href="#" class="text-gray-700 hover:text-blue-500">Contact</a>
+                <a href="{{ route('fonctionnalite') }}" class="text-gray-700 hover:text-blue-500">Fonctionnalités</a>
+                <a href="{{ route('a-propos') }}" class="text-gray-700 hover:text-blue-500">À propos</a>
+                <a href="{{ route('contact') }}" class="text-gray-700 hover:text-blue-500">Contact</a>
             </div>
             <div class="space-x-2">
                 <a href="{{ route('login') }}"
@@ -139,11 +139,11 @@
                     <h3 class="text-lg font-semibold text-white mb-4">Liens utiles</h3>
                     <!-- Utilisation de <ul> pour une liste sémantique -->
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Accueil</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Fonctionnalités</a>
+                        <li><a href="{{ route('public.parcours') }}" class="text-gray-400 hover:text-white transition-colors">Accueil</a></li>
+                        <li><a href="{{ route('fonctionnalite') }}" class="text-gray-400 hover:text-white transition-colors">Fonctionnalités</a>
                         </li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">À propos</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="{{ route('a-propos') }}" class="text-gray-400 hover:text-white transition-colors">À propos</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
                     </ul>
                 </div>
 
