@@ -7,8 +7,9 @@ use App\Http\Controllers\ParcoursController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\PublicController;
 
+// Redirection directe vers la page parcours-public
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('public.parcours');
 });
 
 Route::get('/dashboard', function () {
@@ -47,7 +48,6 @@ Route::middleware('auth')->group(function () {
     Route::get('parcours/{parcour}/qrcode/download', [ParcoursController::class, 'downloadQrCode'])
         ->name('parcours.qrcode.download');
 });
-
 
 // Pages statiques
 Route::view('/fonctionnalite', 'fonctionnalite')->name('fonctionnalite');

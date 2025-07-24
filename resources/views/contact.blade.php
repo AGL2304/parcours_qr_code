@@ -6,6 +6,12 @@
     <title>Contact - GeoQRNav</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+    
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -279,17 +285,17 @@
         }
 
         .faq-answer {
-            margin-top: 1rem;
+            margin-top: 0;
             color: #6b7280;
             line-height: 1.6;
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-            padding: 0;
+            transition: max-height 0.3s ease-out, padding-top 0.3s ease-out;
+            padding-top: 0;
         }
 
         .faq-answer.open {
-            padding: 1rem 0 0.5rem;
+            padding-top: 1rem;
         }
 
         .faq-toggle {
@@ -300,6 +306,13 @@
         .faq-toggle.active {
             transform: rotate(45deg);
         }
+
+        /* Style pour le conteneur de la carte */
+        #map {
+            height: 400px;
+            border-radius: 0.5rem;
+            z-index: 0; /* Assure que la carte est bien positionnée */
+        }
     </style>
 </head>
 <body>
@@ -308,16 +321,16 @@
         <div class="container mx-auto flex justify-between items-center">
             <div class="text-2xl font-bold text-blue-600">📍GeoQRNav</div>
             <div class="space-x-4">
-                <a href="#" class="text-gray-700 hover:text-blue-500">Accueil</a>
-                <a href="#" class="text-gray-700 hover:text-blue-500">Fonctionnalités</a>
-                <a href="#" class="text-gray-700 hover:text-blue-500">À propos</a>
-                <a href="#" class="text-gray-700 hover:text-blue-500 font-bold text-indigo-600">Contact</a>
+                <a href="{{ route('public.parcours') }}" class="text-gray-700 hover:text-blue-500">Accueil</a>
+                <a href="{{ route('fonctionnalite') }}" class="text-gray-700 hover:text-blue-500">Fonctionnalités</a>
+                <a href="{{ route('a-propos') }}" class="text-gray-700 hover:text-blue-500">À propos</a>
+                <a href="{{ route('contact') }}" class="text-gray-700 hover:text-blue-500">Contact</a>
             </div>
             <div class="space-x-2">
-                <a href="#"
+                <a href="{{ route('login') }}"
                     class="px-3 py-1 border border-blue-600 text-blue-600 rounded hover:bg-blue-50">Connexion</a>
 
-                <a href="#"
+                <a href="{{ route('register') }}"
                     class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Inscription</a>
 
             </div>
@@ -510,15 +523,11 @@
             <!-- Map -->
             <h2 class="text-3xl font-semibold mb-4">Où nous trouver</h2>
             <div class="card">
-                <div style="background-color: #f3f4f6; height: 300px; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: #6b7280;">
-                    <div class="text-center">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
-                        <p>Carte interactive intégrée ici</p>
-                        <p class="text-sm">123 Rue de l'Innovation, 75001 Paris</p>
-                    </div>
-                </div>
+                <!-- Conteneur pour la carte Leaflet -->
+                <div id="map"></div>
                 <div class="mt-4 flex flex-wrap gap-4">
-                    <a href="#" class="text-indigo-600 hover:underline">📍 Ouvrir dans Google Maps</a>
+                    <!-- Lien mis à jour pour pointer vers les coordonnées sur Google Maps -->
+                    <a href="https://www.google.com/maps/search/?api=1&query=48.85895,2.34695" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline">📍 Ouvrir dans Google Maps</a>
                     <a href="#" class="text-indigo-600 hover:underline">🚇 Stations de métro à proximité</a>
                     <a href="#" class="text-indigo-600 hover:underline">🚗 Informations parking</a>
                 </div>
@@ -551,6 +560,7 @@
                         informations via QR code.
                     </p>
                     <div class="flex space-x-4">
+                        <!-- Remplacement des emojis par des icônes SVG pour un meilleur contrôle et accessibilité -->
                         <a href="#" class="text-gray-400 hover:text-white transition-colors">
                             <span class="sr-only">Facebook</span>
                             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -580,6 +590,7 @@
                 <!-- Section Liens utiles -->
                 <div>
                     <h3 class="text-lg font-semibold text-white mb-4">Liens utiles</h3>
+                    <!-- Utilisation de <ul> pour une liste sémantique -->
                     <ul class="space-y-2">
                         <li><a href="{{ route('public.parcours') }}" class="text-gray-400 hover:text-white transition-colors">Accueil</a></li>
                         <li><a href="{{ route('fonctionnalite') }}" class="text-gray-400 hover:text-white transition-colors">Fonctionnalités</a>
@@ -623,54 +634,76 @@
         </div>
     </footer>
 
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
+            // --- FONCTIONNALITÉ FAQ ---
             const faqContainer = document.getElementById('faq-container');
+            if (faqContainer) {
+                faqContainer.addEventListener('click', function(e) {
+                    const questionHeader = e.target.closest('.faq-question');
+                    if (!questionHeader) return;
 
-            faqContainer.addEventListener('click', function(e) {
-                // S'assurer que le clic provient bien d'un élément .faq-question
-                const questionHeader = e.target.closest('.faq-question');
-                if (!questionHeader) return;
+                    const faqItem = questionHeader.parentElement;
+                    const answer = faqItem.querySelector('.faq-answer');
+                    const toggle = faqItem.querySelector('.faq-toggle');
+                    const isOpen = answer.classList.contains('open');
 
-                const faqItem = questionHeader.parentElement;
-                const answer = faqItem.querySelector('.faq-answer');
-                const toggle = faqItem.querySelector('.faq-toggle');
-                const isOpen = answer.classList.contains('open');
-
-                // Fermer toutes les réponses ouvertes
-                const allOpenAnswers = faqContainer.querySelectorAll('.faq-answer.open');
-                allOpenAnswers.forEach(openAnswer => {
-                    // Ne pas fermer si c'est l'élément qu'on vient de cliquer
-                    if (openAnswer !== answer) {
-                        openAnswer.classList.remove('open');
-                        openAnswer.style.maxHeight = '0';
-                        const otherToggle = openAnswer.previousElementSibling.querySelector('.faq-toggle');
-                        if(otherToggle) {
-                           otherToggle.textContent = '+';
-                           otherToggle.classList.remove('active');
+                    // Fermer toutes les autres réponses
+                    faqContainer.querySelectorAll('.faq-answer.open').forEach(openAnswer => {
+                        if (openAnswer !== answer) {
+                            openAnswer.classList.remove('open');
+                            openAnswer.style.maxHeight = '0';
+                            const otherToggle = openAnswer.parentElement.querySelector('.faq-toggle');
+                            if(otherToggle) {
+                               otherToggle.textContent = '+';
+                               otherToggle.classList.remove('active');
+                            }
                         }
+                    });
+                    
+                    // Ouvrir ou fermer la réponse cliquée
+                    if (isOpen) {
+                        answer.classList.remove('open');
+                        answer.style.maxHeight = '0';
+                        toggle.textContent = '+';
+                        toggle.classList.remove('active');
+                    } else {
+                        answer.classList.add('open');
+                        answer.style.maxHeight = answer.scrollHeight + '100px';
+                        toggle.textContent = '−';
+                        toggle.classList.add('active');
                     }
                 });
-                
-                // Ouvrir ou fermer la réponse cliquée
-                if (isOpen) {
-                    answer.classList.remove('open');
-                    answer.style.maxHeight = '0';
-                    toggle.textContent = '+';
-                    toggle.classList.remove('active');
-                } else {
-                    answer.classList.add('open');
-                    // Définir la hauteur maximale sur la hauteur réelle du contenu
-                    answer.style.maxHeight = answer.scrollHeight + 'px';
-                    toggle.textContent = '−';
-                    toggle.classList.add('active');
-                }
-            });
+            }
+
+            // --- INITIALISATION DE LA CARTE LEAFLET ---
+            // Coordonnées pour "123 Rue de l'Innovation, 75001 Paris" (adresse fictive, centrée près de Châtelet)
+            const mapCoords = [48.85895, 2.34695]; 
+            const map = L.map('map').setView(mapCoords, 15);
+
+            // Ajout du fond de carte OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            // Ajout d'un marqueur sur la carte
+            const marker = L.marker(mapCoords).addTo(map);
+
+            // Ajout d'une infobulle (popup) au marqueur
+            marker.bindPopup("<b>GeoQRNav</b><br>123 Rue de l'Innovation<br>75001 Paris, France").openPopup();
+
 
             // --- AUTRES SCRIPTS DE LA PAGE ---
 
             // Déterminer le jour actuel pour les horaires
-            const today = new Date().getDay(); // 0 = Dimanche, 1 = Lundi, etc.
+            const today = new Date().getDay(); // 0 = Dimanche, 1 = Lundi, ...
             const dayElements = document.querySelectorAll('.hours-day');
             
             dayElements.forEach(element => {
@@ -683,8 +716,7 @@
             }
             
             // Fonctionnalité du chat en direct
-            const chatButtons = document.querySelectorAll('button');
-            chatButtons.forEach(button => {
+            document.querySelectorAll('button').forEach(button => {
                 if (button.textContent.includes('Démarrer le chat')) {
                     button.addEventListener('click', function() {
                         alert('Chat en direct non implémenté dans cette démo. Contactez-nous par email ou téléphone.');

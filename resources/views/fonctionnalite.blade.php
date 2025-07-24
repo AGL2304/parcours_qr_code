@@ -159,7 +159,7 @@
         .feature-image {
             flex: 1;
             background-color: #e5e7eb;
-            height: 300px;
+            height: 400px;
             border-radius: 0.5rem;
             display: flex;
             align-items: center;
@@ -373,7 +373,7 @@
             <div class="feature-section">
                 <div class="feature-main">
                     <div class="feature-image">
-                        <img src="/api/placeholder/600/400" alt="Carte interactive" />
+                        <img src="{{ asset('img/maps.png') }}" alt="Carte interactive" />
                     </div>
                     <div class="feature-info">
                         <h2>Carte Interactive</h2>
@@ -440,7 +440,7 @@
                         </div>
                     </div>
                     <div class="feature-image">
-                        <img src="/api/placeholder/600/400" alt="Scan QR Code" />
+                        <img src="{{ asset('img/qrcode.png') }}" alt="Scan QR Code" />
                     </div>
                 </div>
             </div>
@@ -449,7 +449,7 @@
             <div class="feature-section">
                 <div class="feature-main">
                     <div class="feature-image">
-                        <img src="/api/placeholder/600/400" alt="Parcours personnalisés" />
+                        <img src="{{ asset('img/parcours.png') }}" alt="Parcours personnalisés" />
                     </div>
                     <div class="feature-info">
                         <h2>Parcours Personnalisés</h2>
