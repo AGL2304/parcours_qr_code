@@ -79,7 +79,7 @@
                         enrichie pour vos parcours personnalisés.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                        <a href="#" class="px-4 py-3 font-bold text-white bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg shadow hover:from-blue-600 hover:to-indigo-700 transition-all text-center">
+                        <a href="{{ route('public.parcours.liste') }}" class="px-4 py-3 font-bold text-white bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg shadow hover:from-blue-600 hover:to-indigo-700 transition-all text-center">
                             Commencer l'exploration
                         </a>
                         <a href="#" class="px-4 py-3 font-bold text-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors text-center">
