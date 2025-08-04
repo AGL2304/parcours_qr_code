@@ -7,107 +7,152 @@
     <title>GeoQRNav - Repérez des sites via carte interactive et QR codes</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .mobile-menu {
+            display: none;
+        }
+        .mobile-menu.active {
+            display: block;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-50 text-gray-800">
 
-    {{-- Navigation --}}
-    <nav class="bg-white shadow-md p-4 mb-6">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-600">📍GeoQRNav</div>
-            <div class="space-x-4">
-                <a href="{{ route('public.parcours') }}" class="text-gray-700 hover:text-blue-500">Accueil</a>
-                <a href="{{ route('fonctionnalite') }}" class="text-gray-700 hover:text-blue-500">Fonctionnalités</a>
-                <a href="{{ route('a-propos') }}" class="text-gray-700 hover:text-blue-500">À propos</a>
-                <a href="{{ route('contact') }}" class="text-gray-700 hover:text-blue-500">Contact</a>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="text-xl md:text-2xl font-bold text-blue-600">📍GeoQRNav</div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-6">
+                    <a href="{{ route('public.parcours') }}" class="text-gray-700 hover:text-blue-500 transition-colors">Accueil</a>
+                    <a href="{{ route('fonctionnalite') }}" class="text-gray-700 hover:text-blue-500 transition-colors">Fonctionnalités</a>
+                    <a href="{{ route('a-propos') }}" class="text-gray-700 hover:text-blue-500 transition-colors">À propos</a>
+                    <a href="{{ route('contact') }}" class="text-gray-700 hover:text-blue-500 transition-colors">Contact</a>
+                </div>
+                
+                <!-- Desktop Auth Buttons -->
+                <div class="hidden md:flex space-x-2">
+                    <a href="{{ route('login') }}" class="px-3 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition-colors">Connexion</a>
+                    <a href="{{ route('register') }}" class="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Inscription</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-gray-700 hover:text-blue-500 focus:outline-none" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
             </div>
-            <div class="space-x-2">
-                <a href="{{ route('login') }}"
-                    class="px-3 py-1 border border-blue-600 text-blue-600 rounded hover:bg-blue-50">Connexion</a>
-
-                <a href="{{ route('register') }}"
-                    class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Inscription</a>
-
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t border-gray-200">
+                <div class="px-4 py-2 space-y-2">
+                    <a href="{{ route('public.parcours') }}" class="block py-2 text-gray-700 hover:text-blue-500 transition-colors">Accueil</a>
+                    <a href="{{ route('fonctionnalite') }}" class="block py-2 text-gray-700 hover:text-blue-500 transition-colors">Fonctionnalités</a>
+                    <a href="{{ route('a-propos') }}" class="block py-2 text-gray-700 hover:text-blue-500 transition-colors">À propos</a>
+                    <a href="{{ route('contact') }}" class="block py-2 text-gray-700 hover:text-blue-500 transition-colors">Contact</a>
+                    <div class="border-t border-gray-200 pt-2 mt-2">
+                        <a href="{{ route('login') }}" class="block py-2 px-4 text-center border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition-colors mb-2">Connexion</a>
+                        <a href="{{ route('register') }}" class="block py-2 px-4 text-center bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Inscription</a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
 
-    {{-- Contenu principal --}}
-    <main class="container mx-auto px-4 mb-16">
-        {{-- Hero section --}}
-        <div class="card bg-white p-6 rounded-lg shadow-md mb-8">
-            <div class="hero-content flex flex-col md:flex-row items-center">
-                <div class="hero-text md:w-1/2 mb-6 md:mb-0">
-                    <h1 class="text-3xl font-bold mb-4">Découvrez les sites avec notre carte interactive</h1>
-                    <p class="mb-4">
+    <!-- Contenu principal -->
+    <main class="container mx-auto px-4 py-6 mb-16">
+        <!-- Hero section -->
+        <div class="bg-white p-4 md:p-6 lg:p-8 rounded-lg shadow-md mb-8">
+            <div class="flex flex-col lg:flex-row items-center gap-6 lg:gap-8">
+                <!-- Hero Text -->
+                <div class="w-full lg:w-1/2 text-center lg:text-left">
+                    <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 leading-tight">
+                        Découvrez les sites avec notre carte interactive
+                    </h1>
+                    <p class="text-sm md:text-base lg:text-lg mb-6 text-gray-600 leading-relaxed">
                         Explorez des points d'intérêt, scannez des QR codes et accédez à une expérience interactive
                         enrichie pour vos parcours personnalisés.
                     </p>
-                    <div class="auth-buttons space-x-2">
-                        <a href="{{ route('public.parcours.liste') }}" class="px-4 py-2 font-bold text-white bg-gradient-to-r from-blue-500 to-indigo-600 rounded shadow hover:from-blue-600 hover:to-indigo-700">Commencer
-                            l'exploration</a>
-                        <a href="#" class="px-4 py-2 font-bold text-indigo-600 border border-indigo-600 rounded hover:bg-indigo-50">En savoir plus</a>
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+                        <a href="#" class="px-4 py-3 font-bold text-white bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg shadow hover:from-blue-600 hover:to-indigo-700 transition-all text-center">
+                            Commencer l'exploration
+                        </a>
+                        <a href="#" class="px-4 py-3 font-bold text-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors text-center">
+                            En savoir plus
+                        </a>
                     </div>
                 </div>
-                <div class="hero-image md:w-1/2">
-                    <div class="map-container relative">
-                        <!-- image de la carte -->
-                        <img src="https://www.leparisien.fr/resizer/efCs6S_-rGdBhi2P0NQeijAEUws=/932x582/arc-anglerfish-eu-central-1-prod-leparisien.s3.amazonaws.com/public/5UAWECLJVFOXQS6RPEGA3XXU3M.jpg" alt="Carte interactive" class="rounded shadow h-64 w-full object-cover">
-
-                        <div class="map-info mt-4 flex justify-between items-center">
-                            <div>
-                                <h3 class="text-xl font-semibold">Carte Interactive</h3>
-                                <p>3 sites disponibles</p>
+                
+                <!-- Hero Image -->
+                <div class="w-full lg:w-1/2">
+                    <div class="relative">
+                        <img src="https://www.leparisien.fr/resizer/efCs6S_-rGdBhi2P0NQeijAEUws=/932x582/arc-anglerfish-eu-central-1-prod-leparisien.s3.amazonaws.com/public/5UAWECLJVFOXQS6RPEGA3XXU3M.jpg" 
+                             alt="Carte interactive" 
+                             class="rounded-lg shadow-lg h-48 md:h-64 lg:h-72 w-full object-cover">
+                        
+                        <div class="mt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                            <div class="text-center sm:text-left">
+                                <h3 class="text-lg md:text-xl font-semibold">Carte Interactive</h3>
+                                <p class="text-sm md:text-base text-gray-600">3 sites disponibles</p>
                             </div>
-                            <div>
-                                <a href="#" class="btn btn-outline px-3 py-2 text-sm">Explorer</a>
-                            </div>
+                            <a href="#" class="w-full sm:w-auto px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50 transition-colors text-center">
+                                Explorer
+                            </a>
                         </div>
                     </div>
-            </div>
-
+                </div>
             </div>
         </div>
 
-        {{-- Fonctionnalités --}}
+        <!-- Fonctionnalités -->
         <section>
-            <h2 class="text-2xl font-bold mb-6">Nos fonctionnalités principales</h2>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="feature-card bg-white p-4 rounded shadow">
-                    <div class="feature-icon text-3xl mb-2">🗺️</div>
-                    <h3 class="text-xl font-semibold mb-2">Carte Interactive</h3>
-                    <p>Naviguez facilement entre les différents points d'intérêt sur notre carte interactive
-                        personnalisable.</p>
+            <h2 class="text-xl md:text-2xl lg:text-3xl font-bold mb-6 text-center lg:text-left">
+                Nos fonctionnalités principales
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                <div class="bg-white p-4 md:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-3xl md:text-4xl mb-3 text-center">🗺️</div>
+                    <h3 class="text-lg md:text-xl font-semibold mb-3 text-center">Carte Interactive</h3>
+                    <p class="text-sm md:text-base text-gray-600 text-center leading-relaxed">
+                        Naviguez facilement entre les différents points d'intérêt sur notre carte interactive personnalisable.
+                    </p>
                 </div>
-                <div class="feature-card bg-white p-4 rounded shadow">
-                    <div class="feature-icon text-3xl mb-2">📱</div>
-                    <h3 class="text-xl font-semibold mb-2">Scan QR Code</h3>
-                    <p>Accédez instantanément aux informations détaillées en scannant les QR codes des sites.</p>
+                <div class="bg-white p-4 md:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-3xl md:text-4xl mb-3 text-center">📱</div>
+                    <h3 class="text-lg md:text-xl font-semibold mb-3 text-center">Scan QR Code</h3>
+                    <p class="text-sm md:text-base text-gray-600 text-center leading-relaxed">
+                        Accédez instantanément aux informations détaillées en scannant les QR codes des sites.
+                    </p>
                 </div>
-                <div class="feature-card bg-white p-4 rounded shadow">
-                    <div class="feature-icon text-3xl mb-2">🛣️</div>
-                    <h3 class="text-xl font-semibold mb-2">Parcours Personnalisés</h3>
-                    <p>Créez et suivez des parcours adaptés à vos besoins spécifiques pour une exploration sur mesure.
+                <div class="bg-white p-4 md:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow md:col-span-2 lg:col-span-1">
+                    <div class="text-3xl md:text-4xl mb-3 text-center">🛣️</div>
+                    <h3 class="text-lg md:text-xl font-semibold mb-3 text-center">Parcours Personnalisés</h3>
+                    <p class="text-sm md:text-base text-gray-600 text-center leading-relaxed">
+                        Créez et suivez des parcours adaptés à vos besoins spécifiques pour une exploration sur mesure.
                     </p>
                 </div>
             </div>
         </section>
     </main>
 
-    {{-- Pied de page --}}
-    <footer class="bg-gray-800 text-white w-full">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <!-- Pied de page -->
+    <footer class="bg-gray-800 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
 
                 <!-- Section GeoQRNav -->
-                <div class="space-y-4">
+                <div class="space-y-4 text-center sm:text-left">
                     <h3 class="text-lg font-semibold text-white">GeoQRNav</h3>
                     <p class="text-sm text-gray-400 leading-relaxed">
                         Une solution interactive pour repérer des sites à travers une carte et accéder à des
                         informations via QR code.
                     </p>
-                    <div class="flex space-x-4">
-                        <!-- Remplacement des emojis par des icônes SVG pour un meilleur contrôle et accessibilité -->
+                    <div class="flex justify-center sm:justify-start space-x-4">
                         <a href="#" class="text-gray-400 hover:text-white transition-colors">
                             <span class="sr-only">Facebook</span>
                             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -135,39 +180,34 @@
                 </div>
 
                 <!-- Section Liens utiles -->
-                <div>
+                <div class="text-center sm:text-left">
                     <h3 class="text-lg font-semibold text-white mb-4">Liens utiles</h3>
-                    <!-- Utilisation de <ul> pour une liste sémantique -->
                     <ul class="space-y-2">
                         <li><a href="{{ route('public.parcours') }}" class="text-gray-400 hover:text-white transition-colors">Accueil</a></li>
-                        <li><a href="{{ route('fonctionnalite') }}" class="text-gray-400 hover:text-white transition-colors">Fonctionnalités</a>
-                        </li>
+                        <li><a href="{{ route('fonctionnalite') }}" class="text-gray-400 hover:text-white transition-colors">Fonctionnalités</a></li>
                         <li><a href="{{ route('a-propos') }}" class="text-gray-400 hover:text-white transition-colors">À propos</a></li>
                         <li><a href="{{ route('contact') }}" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
                     </ul>
                 </div>
 
                 <!-- Section Support -->
-                <div>
+                <div class="text-center sm:text-left">
                     <h3 class="text-lg font-semibold text-white mb-4">Support</h3>
                     <ul class="space-y-2">
                         <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Documentation</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Tutoriels</a></li>
+                        <li><a href="#" class="text-gray-footer hover:text-white transition-colors">Tutoriels</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Centre d'aide</a></li>
                     </ul>
                 </div>
 
                 <!-- Section Légal -->
-                <div>
+                <div class="text-center sm:text-left">
                     <h3 class="text-lg font-semibold text-white mb-4">Légal</h3>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Conditions
-                                d'utilisation</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Politique de
-                                confidentialité</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Mentions légales</a>
-                        </li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Conditions d'utilisation</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Politique de confidentialité</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Mentions légales</a></li>
                     </ul>
                 </div>
             </div>
@@ -175,11 +215,32 @@
             <!-- Ligne de séparation et copyright -->
             <div class="mt-8 pt-8 border-t border-gray-700">
                 <p class="text-center text-sm text-gray-400">
-                    © 2025 GeoQRNav. Tous droits réservés. 
+                    © 2025 GeoQRNav. Tous droits réservés.
                 </p>
             </div>
         </div>
     </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Fermer le menu mobile quand on clique sur un lien
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobileMenu').classList.remove('active');
+            });
+        });
+
+        // Fermer le menu mobile si on redimensionne vers desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) {
+                document.getElementById('mobileMenu').classList.remove('active');
+            }
+        });
+    </script>
 
 </body>
 

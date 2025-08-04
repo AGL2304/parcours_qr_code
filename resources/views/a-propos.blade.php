@@ -269,26 +269,57 @@
         .right::after {
             left: -12px;
         }
+
+        .mobile-menu {
+            display: none;
+        }
+        .mobile-menu.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="bg-white shadow-md p-4 mb-6">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-600">📍GeoQRNav</div>
-            <div class="space-x-4">
-                <a href="{{ route('public.parcours') }}" class="text-gray-700 hover:text-blue-500">Accueil</a>
-                <a href="{{ route('fonctionnalite') }}" class="text-gray-700 hover:text-blue-500">Fonctionnalités</a>
-                <a href="{{ route('a-propos') }}" class="text-gray-700 hover:text-blue-500">À propos</a>
-                <a href="{{ route('contact') }}" class="text-gray-700 hover:text-blue-500">Contact</a>
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="text-xl md:text-2xl font-bold text-blue-600">📍GeoQRNav</div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-6">
+                    <a href="{{ route('public.parcours') }}" class="text-gray-700 hover:text-blue-500 transition-colors">Accueil</a>
+                    <a href="{{ route('fonctionnalite') }}" class="text-gray-700 hover:text-blue-500 transition-colors">Fonctionnalités</a>
+                    <a href="{{ route('a-propos') }}" class="text-gray-700 hover:text-blue-500 transition-colors">À propos</a>
+                    <a href="{{ route('contact') }}" class="text-gray-700 hover:text-blue-500 transition-colors">Contact</a>
+                </div>
+                
+                <!-- Desktop Auth Buttons -->
+                <div class="hidden md:flex space-x-2">
+                    <a href="{{ route('login') }}" class="px-3 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition-colors">Connexion</a>
+                    <a href="{{ route('register') }}" class="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Inscription</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-gray-700 hover:text-blue-500 focus:outline-none" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
             </div>
-            <div class="space-x-2">
-                <a href="{{ route('login') }}"
-                    class="px-3 py-1 border border-blue-600 text-blue-600 rounded hover:bg-blue-50">Connexion</a>
-
-                <a href="{{ route('register') }}"
-                    class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Inscription</a>
-
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t border-gray-200">
+                <div class="px-4 py-2 space-y-2">
+                    <a href="{{ route('public.parcours') }}" class="block py-2 text-gray-700 hover:text-blue-500 transition-colors">Accueil</a>
+                    <a href="{{ route('fonctionnalite') }}" class="block py-2 text-gray-700 hover:text-blue-500 transition-colors">Fonctionnalités</a>
+                    <a href="{{ route('a-propos') }}" class="block py-2 text-gray-700 hover:text-blue-500 transition-colors">À propos</a>
+                    <a href="{{ route('contact') }}" class="block py-2 text-gray-700 hover:text-blue-500 transition-colors">Contact</a>
+                    <div class="border-t border-gray-200 pt-2 mt-2">
+                        <a href="{{ route('login') }}" class="block py-2 px-4 text-center border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition-colors mb-2">Connexion</a>
+                        <a href="{{ route('register') }}" class="block py-2 px-4 text-center bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">Inscription</a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -540,5 +571,26 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Fermer le menu mobile quand on clique sur un lien
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobileMenu').classList.remove('active');
+            });
+        });
+
+        // Fermer le menu mobile si on redimensionne vers desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) {
+                document.getElementById('mobileMenu').classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
